@@ -19,12 +19,13 @@ class ConversationsApp extends React.Component {
     super(props);
 
     const name = localStorage.getItem("name") || "";
+    const token = localStorage.getItem("token") || "";
     const loggedIn = name !== "";
 
     this.state = {
       name,
       loggedIn,
-      token: null,
+      token,
       statusString: null,
       conversationsReady: false,
       conversations: [],
@@ -35,15 +36,18 @@ class ConversationsApp extends React.Component {
 
   componentDidMount = () => {
     if (this.state.loggedIn) {
-      this.getToken();
       this.setState({ statusString: "Fetching credentials…" });
     }
   };
 
-  logIn = (name) => {
+  logIn = (name, token) => {
     if (name !== "") {
       localStorage.setItem("name", name);
-      this.setState({ name, loggedIn: true }, this.getToken);
+      this.setState({ name, loggedIn: true });
+    }
+    if (token !== "") {
+      localStorage.setItem("token", token);
+      this.setState({ token }, this.initConversations);
     }
   };
 
@@ -64,13 +68,6 @@ class ConversationsApp extends React.Component {
 
     localStorage.removeItem("name");
     this.conversationsClient.shutdown();
-  };
-
-  getToken = () => {
-    // Paste your unique Chat token function
-    const myToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzBjNWExMGRiZTQ2M2M5ZGI5MmQxOGY5MTdiYmI0YTcwLTE2MjczNzA3MDgiLCJncmFudHMiOnsiaWRlbnRpdHkiOiJ1c2VyMUBnbWFpbC5jb20iLCJjaGF0Ijp7InNlcnZpY2Vfc2lkIjoiSVNjZDFjMDE3M2Y5M2E0ZTQ1OGFhNzI2NmJiODc5MjRkMiJ9fSwiaWF0IjoxNjI3MzcwNzA4LCJleHAiOjE2MjczNzQzMDgsImlzcyI6IlNLMGM1YTEwZGJlNDYzYzlkYjkyZDE4ZjkxN2JiYjRhNzAiLCJzdWIiOiJBQzZlZjZmMGRlMjNmZDI4YTkyODAyNGM1ODRjNTkyMGUwIn0.NS-QJFGMcnqkn11WjVd1JkUwQXOqiiC3hm5R7iDummk";
-    this.setState({ token: myToken }, this.initConversations);
   };
 
   initConversations = async () => {

@@ -12,8 +12,8 @@ export class LoginPage extends React.Component {
 
         form.validateFields((err, values) => {
             if (!err) {
-                const { username } = values;
-                onSubmit(username);
+                const { username, token } = values;
+                onSubmit(username, token);
             }
         });
     };
@@ -24,6 +24,10 @@ export class LoginPage extends React.Component {
         const usernameFieldDecorator = getFieldDecorator('username', {
             rules: [{ required: true, message: 'Please input your username!' }],
         });
+        
+        const tokenFieldDecorator = getFieldDecorator('token', {
+            rules: [{ required: true, message: 'Please input your token!' }],
+        });
 
         return (
             <Layout>
@@ -32,15 +36,22 @@ export class LoginPage extends React.Component {
                         <Col span={12} offset={6}>
                             <Card style={{ maxWidth: '404px' }}>
                                 <Row type="flex" justify="center" align="middle" style={{ marginBottom: '30px' }}>
-                                    <Logo/>
+                                    <Logo />
                                 </Row>
 
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Item>
                                         {usernameFieldDecorator(
                                             <Input
-                                                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>}
+                                                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                                 placeholder="Username"
+                                            />,
+                                        )}
+                                        {tokenFieldDecorator(
+                                            <Input
+                                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                                placeholder="Password"
+                                                type="password"
                                             />,
                                         )}
                                     </Form.Item>
